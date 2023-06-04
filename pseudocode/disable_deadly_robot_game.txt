@@ -36,9 +36,10 @@ function validateDirectionCommand(command, current_room):
     RETURN True
 
 function handleCommand(command, current_room, inventory):
+    INITIALIZE current_command to first element of command tuple
     INITIALIZE new_room to current_room
     INITIALIZE player_dead and player_won to False
-    IF command equals 'go':
+    IF current_command equals 'go':
         CALL handleDirectionCommand(command, current_room)
         SET new_room and player_dead to return result of handleDirectionCommand
     ELSE:
@@ -48,9 +49,9 @@ function handleCommand(command, current_room, inventory):
     RETURN a tuple with new_room, player_dead, and player_won as elements
 
 function handleItemCommand(current_room, inventory):
-    APPEND current_room.item to inventory
-    REMOVE current_room.item from current_room
-    IF length of inventory is six:
+    APPEND current_room.item to inventory list
+    SET current_room.item to None
+    IF length of inventory list is equal to six:
         RETURN True
     ENDIF
     RETURN False
@@ -99,16 +100,17 @@ function main():
         PRINT current_room
         PRINT inventory
         IF current_room.item is not None:
-            PRINT current_room.item
+            PRINT 'You see a {current_room.item}'
         END IF
         WHILE is_valid_command is False:
             CALL getCommand()
             SET command to return value of getCommand
             CALL validateCommand(command, current_room)
             SET is_valid_command to return value of validateCommand
-        CALL handleCommand(command, current_room)
+        END WHILE
+        CALL handleCommand(command, current_room, inventory)
         SET current_room, player_dead, and player_won to return values of handleCommand
     END WHILE
-    CALL finalMessage(player_won)
+    CALL showEndOfGameMessage(player_won)
 
 CALL main()
