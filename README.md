@@ -1,0 +1,126 @@
+# This is the pseudocode and game map for a text-based game
+
+## Game Map
+
+![Flow Chart](images/GameMap.jpeg)
+
+## Pseudocode
+
+```
+
+function validateCommand(command, current_room):
+    INITIALIZE validation_result to True
+    IF length of command tuple does not equal two:
+        PRINT 'Invalid input!'
+        SET validation_result to False
+    ELSE IF first element of command tuple does not equal 'go' OR 'get':
+        PRINT 'Invalid input!'
+        SET validation_result to False
+    ELSE IF first element of command tuple equals 'go':
+        CALL validateDirectionCommand(command, current_room)
+        SET validation_result to return value of validateDirectionCommand
+    ELSE IF first element of command tuple equals 'get':
+        CALL validateItemCommand(command, current_room)
+        SET validation_result to return value of validateItemCommand(command)
+    END IF
+    RETURN validation_result
+
+function validateItemCommand(command, current_room):
+    INITIALIZE item to second element of command tuple
+    IF item does not equal current_room.item:
+        PRINT 'Cannot get {item}'
+        RETURN False
+    END IF
+    RETURN True
+
+function validateDirectionCommand(command, current_room):
+    INITIALIZE direction to second element of command tuple
+    IF direction is not 'north', 'east', 'west', or 'south':
+        PRINT 'Direction must be: <north|east|west|south>'
+        RETURN False
+    ELSE IF direction is not in current_room.directions:
+        PRINT 'You cannot go that direction.'
+        RETURN False
+    END IF
+    RETURN True
+
+function handleCommand(command, current_room, inventory):
+    INITIALIZE current_command to first element of command tuple
+    INITIALIZE new_room to current_room
+    INITIALIZE player_dead and player_won to False
+    IF current_command equals 'go':
+        CALL handleDirectionCommand(command, current_room)
+        SET new_room and player_dead to return result of handleDirectionCommand
+    ELSE:
+        CALL handleItemCommand(current_room, inventory)
+        SET player_won to return result of handleItemCommand
+    END IF
+    RETURN a tuple with new_room, player_dead, and player_won as elements
+
+function handleItemCommand(current_room, inventory):
+    APPEND current_room.item to inventory list
+    SET current_room.item to None
+    IF length of inventory list is equal to six:
+        RETURN True
+    ENDIF
+    RETURN False
+
+function handleDirectionCommand(command, current_room):
+    INITIALIZE new_room to None
+    INITIALIZE player_dead to False
+    INITIALIZE direction to second element of command tuple
+    SET new_room to current_room.direction which will be a reference to a different room
+    IF new_room.has_robot is True:
+        SET player_dead to True
+    ENDIF
+    RETURN a tuple with new_room and player_dead as elements
+
+function getCommand():
+    INITIALIZE command to None
+    PRINT 'Enter command: '
+    GET command from standard input
+    SET command to a tuple of strings by splitting the command string received from standard input
+    RETURN command
+
+function showEndOfGameMessage(player_won):
+    IF player_won is True:
+        PRINT 'You have collected all the items! You win!'
+    ELSE:
+        PRINT 'Oh no! The robot!!! You died...'
+    END IF
+
+function main():
+    PRINT """
+    -- Disable the Deadly Robot Game --
+    Collect the six items required to build the remote-control which disables the robot to win the game.
+    If you enter the room with the robot you will die.
+    ------------- Commands -------------
+    Movement:            go <north|east|west|south>
+    Add to inventory:    get <item name>
+    ------------------------------------
+    """
+    INITIALIZE rooms (this will be a container of custom room objects that have all the required attributes)
+    INITIALIZE inventory to an empty list
+    INITIALIZE current_room to rooms.main_lobby
+    INITIALIZE command and is_valid_command to None
+    INITIALIZE player_won and player_dead to False
+    WHILE player_won is False AND player_dead is False:
+        SET is_valid_command to False
+        PRINT current_room
+        PRINT inventory
+        IF current_room.item is not None:
+            PRINT 'You see a {current_room.item}'
+        END IF
+        WHILE is_valid_command is False:
+            CALL getCommand()
+            SET command to return value of getCommand
+            CALL validateCommand(command, current_room)
+            SET is_valid_command to return value of validateCommand
+        END WHILE
+        CALL handleCommand(command, current_room, inventory)
+        SET current_room, player_dead, and player_won to return values of handleCommand
+    END WHILE
+    CALL showEndOfGameMessage(player_won)
+
+CALL main()
+```
