@@ -1,0 +1,8 @@
+Create pseudocode or a flowchart that logically outlines the steps that will allow the 
+player to get the item from the room they are in and add it to their inventory.
+
+Be sure to address the following:
+What input do you need from the player? How will you prompt the player for that input? How will you validate the input?
+What should the program do if the player enters a valid item (the item in their current room)? What output should result?
+What should the program do if the player enters an invalid item (an item not in their current room)? What output should result?
+How will you control the program flow with decision branching or loops?
