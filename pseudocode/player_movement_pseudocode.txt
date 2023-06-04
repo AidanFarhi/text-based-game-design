@@ -1,8 +1,0 @@
-Create pseudocode or a flowchart that logically outlines the steps that 
-will allow the player to move between rooms using commands to go North, South, East, and West.
-
-Be sure to address the following:
-What input do you need from the player? How will you prompt the player for that input? How will you validate the input?
-What should the program do if the player enters a valid direction? What output should result?
-What should the program do if the player enters an invalid direction? What output should result?
-How will you control the program flow with decision branching and loops?
